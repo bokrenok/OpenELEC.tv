@@ -1,0 +1,83 @@
+diff --git a/arch/arm64/boot/dts/amlogic/gxbb_p200.dts b/arch/arm64/boot/dts/amlogic/gxbb_p200.dts
+index 803045e..d9a9cc7 100644
+--- a/arch/arm64/boot/dts/amlogic/gxbb_p200.dts
++++ b/arch/arm64/boot/dts/amlogic/gxbb_p200.dts
+@@ -138,7 +138,7 @@
+ 		interrupts = <0 3 1
+ 			0 89 1>;
+ 		interrupt-names = "viu-vsync", "rdma";
+-		mem_size = <0x01800000 0x00800000>; /* fb0/fb1 memory size */
++		mem_size = <0x01800000 0x00100000>; /* fb0/fb1 memory size */
+ 		vmode = <3>; /** 0:VMODE_720P 1:VMODE_LCD 2:VMODE_LVDS_1080P 3:VMODE_1080P */
+ 		scale_mode = <1>; /** 0:VPU free scale 1:OSD free scale 2:OSD super scale */
+ 		display_size_default = <1920 1080 1920 3240 32>; //1920*1080*4*3 = 0x17BB000
+@@ -187,15 +187,15 @@
+ 			status = "okay";
+ 	};
+ 	ethmac: ethernet@0xc9410000{
+-                compatible = "amlogic, gxbb-rgmii-dwmac";
++                compatible = "amlogic, gxbb-rmii-dwmac";
+                 reg = <0x0 0xc9410000 0x0 0x10000
+                 0x0 0xc8834540 0x0 0x8>;
+                 interrupts = <0 8 1>;
+-                phy-mode= "rgmii";
++                phy-mode= "rmii";
+                 pinctrl-names = "eth_pins";
+                 pinctrl-0 = <&eth_pins>;
+                 rst_pin-gpios = <&gpio GPIOZ_14 0>;
+-                mc_val = <0x1621>;
++                mc_val = <0x1800>;
+                 resets = <&clock GCLK_IDX_ETHERNET>;
+                 reset-names = "ethpower";
+                 interrupt-names = "macirq";
+@@ -350,12 +350,12 @@
+ 			3: 250.0M    4: 333.3M    5: 400.0M
+ 			6: 500.0M    7: 666.7M */
+ 	};
+-	bt-dev{
+-		compatible = "amlogic, bt-dev";
+-		dev_name = "bt-dev";
+-		status = "ok";
+-		gpio_reset = <&gpio       GPIOX_20       GPIO_ACTIVE_HIGH>;
+-	};
++//	bt-dev{
++//		compatible = "amlogic, bt-dev";
++//		dev_name = "bt-dev";
++//		status = "ok";
++//		gpio_reset = <&gpio       GPIOX_20       GPIO_ACTIVE_HIGH>;
++//	};
+ 
+ 	rtc{
+ 		compatible = "amlogic, aml_vrtc";
+@@ -810,11 +810,11 @@
+ 		pl-periph-id = <0>; /** lm name */
+ 		clock-src = "usb0"; /** clock src */
+ 		port-id = <0>;  /** ref to mach/usb.h */
+-		port-type = <0>;	/** 0: otg, 1: host, 2: slave */
++		port-type = <1>;	/** 0: otg, 1: host, 2: slave */
+ 		port-speed = <0>; /** 0: default, high, 1: full */
+ 		port-config = <0>; /** 0: default */
+ 		port-dma = <0>; /** 0: default, 1: single, 2: incr, 3: incr4, 4: incr8, 5: incr16, 6: disable*/
+-		port-id-mode = <0>; /** 0: hardware, 1: sw_host, 2: sw_slave*/
++		port-id-mode = <1>; /** 0: hardware, 1: sw_host, 2: sw_slave*/
+ 		gpio-vbus-power = "GPIODV_24";
+ 		gpios = <&gpio       GPIODV_24       GPIO_ACTIVE_HIGH>;
+ 		gpio-work-mask	= <1>; /**0: work on pulldown,1:work on pullup*/
+@@ -950,7 +951,7 @@
+ 	amlogic_thermals:amlogic_thermals{
+ 		compatible = "amlogic, amlogic-thermal";
+ 		#thermal-cells = <7>;
+-		device_name = "thermal";
++		dev_name = "aml_thermal";
+ 		trip_point = <70 1536001 1536001  511  511    3    2
+ 			      80 1296001 1296001  435  435    2    1
+ 			      90 1032001 1032001  328  328    2    1
+@@ -960,6 +960,7 @@
+ 		keep_mode;
+ 		keep_mode_threshold = <85>;
+ 		keep_mode_max_range = <2016000 666 4 3>;
++		keep_mode_min_range = <400 400 1 2>;
+ 	};
+ 	gpio_keypad{
+ 	    compatible = "amlogic, gpio_keypad";
+
